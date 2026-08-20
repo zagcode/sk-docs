@@ -747,3 +747,40 @@ metade de Período), `"S"` (Texto), `"I"` (Inteiro/Entidade/singleList),
 | `(:PARAM IS NULL OR CAMPO = :@PARAM)` | SQL | Filtro opcional — parâmetro vazio não filtra |
 | `WHERE FAIXA_CALC IN :FAIXA` | SQL | Multi-lista alimentando `IN` |
 | Linha-sentinela via `UNION ALL` com `P.MSG_ERRO`/flag de validação | SQL | Retorna mensagem amigável na própria grid sem falhar a query (ver `02-sql-padroes.md`) |
+
+## 16. Parâmetros do prompt NÃO são reativos/em cascata
+
+Checagem exaustiva (grep em todo `sk-dash/*.xml`): nenhum `<parameter listType="sql">`
+deste workspace referencia outro `:P_X` dentro da própria query de lista. O
+Construtor de BI nativo resolve todos os parâmetros do `<prompt-parameters>`
+de uma vez, na abertura da tela de filtros — escolher um valor num parâmetro
+não reconsulta a lista de outro (diferente de um formulário web comum com
+campos dependentes). Ao desenhar um dashboard novo com dois filtros
+relacionados (ex.: Marca → Produto da marca), não desenhar como cascata
+reativa — alternativas usadas em produção:
+- Listar tudo, mas ordenar/rotular pelo campo "pai" (ex.: `LABEL = MARCA + ' - ' + PRODUTO`, `ORDER BY MARCA, PRODUTO`) para facilitar achar visualmente, com o SQL final da query de dados ainda combinando os dois parâmetros corretamente.
+- Ou usar 2 níveis (`<level>`) — o primeiro só com o filtro "pai", que ao navegar (`on-click navigate-to`) já leva o valor escolhido como `<arg>` fixo para o nível seguinte, que aí sim roda a query "filha" já restrita.
+
+Ver dashboard `sk-dash/desempenho vendas marca/desempenho_vendas_marca.xml`
+para um exemplo do primeiro padrão (`P_PRODUTO` listado por completo, rotulado
+por marca).
+
+## 17. `AD_DPSFERIADOS` — nome de coluna confirmado: `EXPEDIENTENORMAL`
+
+A coluna real no banco é **`EXPEDIENTENORMAL`** (com L) — confirmado pelo
+usuário. `sk-bd/feriados/insert_ad_dpsferiados.sql` (3 ocorrências) grava com
+o nome **`EXPEDIENTENORMA`** (sem L) no `INSERT INTO ... (...)`, o que só
+funciona se a coluna tiver um alias/sinônimo sem L no banco, ou se o script
+estiver desatualizado em relação à estrutura real — não copiar esse script
+como referência de nome de coluna. O SQL de produção em `analise.vendas.xml`
+(`WHERE EXPEDIENTENORMAL = 'S'`) e o novo dashboard `sk-dash/desempenho
+vendas marca/desempenho_vendas_marca.xml` usam a forma correta com L; usar
+sempre `EXPEDIENTENORMAL` em CTEs novos que consultem essa tabela.
+
+Também: hoje só existem linhas de feriados carregadas para `CODEMP=9` no
+script deste repositório — um CTE que junta `AD_DPSFERIADOS` por empresa deve
+prever fallback (contagem seg-sex pura) para empresas sem nenhuma linha
+cadastrada, em vez de um `LEFT JOIN` simples que zeraria os dias úteis
+delas. Ver `DiasUteis`/`EmpresasComFeriados` em
+`sk-dash/desempenho vendas marca/desempenho_vendas_marca.xml` para o padrão
+de fallback implementado.
