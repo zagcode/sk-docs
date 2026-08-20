@@ -66,6 +66,17 @@
 | CODIGO | INT | PK |
 | DESCRICAO | VARCHAR | Nome da marca |
 
+**Gotcha confirmado via `dps-consulta` em 2026-08-20**: ~54 códigos de
+`TGFMAR` têm `DESCRICAO` nula/em branco (ex.: 205, 207, 217, 230-280) — são
+marcas mortas, **nenhuma com produto vinculado** (`TGFPRO.CODMARCA`).
+Qualquer `<parameter listType="sql">` de multi-seleção de marca deve
+filtrar `WHERE DESCRICAO IS NOT NULL AND LTRIM(RTRIM(DESCRICAO)) <> ''`,
+senão a lista de filtro aparece com dezenas de linhas em branco no topo
+(ordenam primeiro por string vazia). Como nenhuma tem produto, não é
+necessário o mesmo filtro no JOIN da query de dados — só afeta a lista do
+parâmetro. Ver `sk-dash/desempenho vendas marca/desempenho_vendas_marca.xml`
+(`P_MARCA`) para o padrão corrigido.
+
 ### TGFGRU — Grupos / Famílias de produto
 | Coluna | Tipo | Descrição |
 |---|---|---|
