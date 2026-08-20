@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="romaneio_separacao_itens_subreport" language="java" pageWidth="575" pageHeight="802" columnWidth="575" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" whenNoDataType="NoDataSection">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_CODEMP" class="java.lang.Integer"/>
+	<parameter name="P_NUNOTA_IDS" class="java.lang.String"/>
+	<parameter name="P_CODIGO_SEPARADOR" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[EXEC SANKHYA.DPS_ROMANEIO_SEPARACAO_RETORNA_ITENS $P{P_CODEMP}, $P{P_NUNOTA_IDS}, $P{P_CODIGO_SEPARADOR}]]>
+	</queryString>
+	<field name="numero_nota" class="java.lang.Integer"/>
+	<field name="nutarefa" class="java.lang.Integer"/>
+	<field name="codprod" class="java.lang.Integer"/>
+	<field name="quant" class="java.lang.Integer"/>
+	<field name="referencia" class="java.lang.String"/>
+	<field name="Localizador" class="java.lang.String"/>
+	<field name="unidade" class="java.lang.String"/>
+	<field name="marca" class="java.lang.String"/>
+	<field name="descricao" class="java.lang.String"/>
+	<field name="cestinha" class="java.lang.String"/>
+	<field name="subestoque" class="java.lang.String"/>
+	<field name="cod_usuario_separador" class="java.lang.Integer"/>
+	<field name="nome_usuario_separador" class="java.lang.String"/>
+	<field name="ObsPedido" class="java.lang.String"/>
+	<group name="G_TAREFA">
+		<groupExpression><![CDATA[$F{nutarefa}]]></groupExpression>
+		<groupFooter>
+			<band height="62">
+				<line><reportElement x="0" y="4" width="575" height="1"/></line>
+				<rectangle><reportElement x="0" y="12" width="135" height="40"/></rectangle>
+				<textField isBlankWhenNull="true"><reportElement x="5" y="24" width="125" height="16"/><textElement textAlignment="Center" verticalAlignment="Middle"><font size="12" isBold="true"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{cestinha}]]></textFieldExpression></textField>
+				<textField isBlankWhenNull="true" isStretchWithOverflow="true"><reportElement x="140" y="12" width="435" height="40"/><textElement verticalAlignment="Top"><font size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{ObsPedido}]]></textFieldExpression></textField>
+			</band>
+		</groupFooter>
+	</group>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<line><reportElement x="0" y="19" width="575" height="1"/></line>
+			<line><reportElement x="45" y="0" width="1" height="20"/></line>
+			<line><reportElement x="85" y="0" width="1" height="20"/></line>
+			<line><reportElement x="165" y="0" width="1" height="20"/></line>
+			<line><reportElement x="285" y="0" width="1" height="20"/></line>
+			<line><reportElement x="330" y="0" width="1" height="20"/></line>
+			<line><reportElement x="415" y="0" width="1" height="20"/></line>
+			<line><reportElement x="530" y="0" width="1" height="20"/></line>
+			<line><reportElement x="574" y="0" width="1" height="20"/></line>
+			<textField isBlankWhenNull="true"><reportElement x="0" y="2" width="45" height="16"/><textElement textAlignment="Center" verticalAlignment="Middle"><font size="10" isBold="true"/></textElement><textFieldExpression class="java.lang.Integer"><![CDATA[$F{quant}]]></textFieldExpression></textField>
+			<staticText><reportElement x="45" y="2" width="40" height="16"/><textElement textAlignment="Center" verticalAlignment="Middle"><font size="8"/></textElement><text><![CDATA[___]]></text></staticText>
+			<textField isBlankWhenNull="true"><reportElement x="85" y="2" width="80" height="16"/><textElement textAlignment="Center" verticalAlignment="Middle"><font size="10"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{referencia}]]></textFieldExpression></textField>
+			<textField isBlankWhenNull="true"><reportElement x="165" y="2" width="120" height="16"/><textElement verticalAlignment="Middle"><font size="10"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{Localizador}]]></textFieldExpression></textField>
+			<textField isBlankWhenNull="true"><reportElement x="285" y="2" width="45" height="16"/><textElement textAlignment="Center" verticalAlignment="Middle"><font size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{unidade}]]></textFieldExpression></textField>
+			<textField isBlankWhenNull="true"><reportElement x="330" y="2" width="85" height="16"/><textElement textAlignment="Center" verticalAlignment="Middle"><font size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{marca}]]></textFieldExpression></textField>
+			<textField isBlankWhenNull="true"><reportElement x="415" y="2" width="115" height="16"/><textElement verticalAlignment="Middle"><font size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{descricao}]]></textFieldExpression></textField>
+			<textField isBlankWhenNull="true"><reportElement x="530" y="2" width="45" height="16"/><textElement textAlignment="Center" verticalAlignment="Middle"><font size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{subestoque}]]></textFieldExpression></textField>
+		</band>
+	</detail>
+	<noData>
+		<band height="20">
+			<staticText><reportElement x="0" y="0" width="575" height="18"/><textElement textAlignment="Center" verticalAlignment="Middle"><font size="9" isBold="true"/></textElement><text><![CDATA[Nao ha itens para separar.]]></text></staticText>
+		</band>
+	</noData>
+</jasperReport>

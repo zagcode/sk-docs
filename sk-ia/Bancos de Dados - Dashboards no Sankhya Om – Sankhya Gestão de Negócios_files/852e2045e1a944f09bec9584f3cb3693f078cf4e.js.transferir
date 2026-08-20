@@ -1,0 +1,123 @@
+class LocalStorageManager {
+    constructor(key) {
+        this.key = key;
+    }
+
+    setItem(value) {
+        try {
+            const serializedValue = JSON.stringify(value);
+            localStorage.setItem(this.key, serializedValue);
+            return true;
+        } catch (error) {
+            console.error('Error setting localStorage item:', error);
+            return false;
+        }
+    }
+
+    getItem(defaultValue = null) {
+        try {
+            const item = localStorage.getItem(this.key);
+            if (item === null) {
+                return defaultValue;
+            }
+            return JSON.parse(item);
+        } catch (error) {
+            console.error('Error getting localStorage item:', error);
+            return defaultValue;
+        }
+    }
+
+    removeItem() {
+        try {
+            localStorage.removeItem(this.key);
+            return true;
+        } catch (error) {
+            console.error('Error removing localStorage item:', error);
+            return false;
+        }
+    }
+
+    hasItem() {
+        return localStorage.getItem(this.key) !== null;
+    }
+
+    clear() {
+        return this.removeItem();
+    }
+
+    setWithExpiry(value, expiryMinutes = 1) {
+        try {
+            const now = new Date();
+            const expiryTime = new Date(now.getTime() + (expiryMinutes * 60 * 1000));
+            const item = {
+                value: value,
+                expiry: expiryTime.getTime()
+            };
+            const serializedValue = JSON.stringify(item);
+            localStorage.setItem(this.key, serializedValue);
+            return true;
+        } catch (error) {
+            console.error('Error setting localStorage item with expiry:', error);
+            return false;
+        }
+    }
+
+    getWithExpiry(defaultValue = null) {
+        try {
+            const item = localStorage.getItem(this.key);
+            if (item === null) {
+                return defaultValue;
+            }
+
+            const parsedItem = JSON.parse(item);
+            const now = new Date().getTime();
+
+            if (now > parsedItem.expiry) {
+                localStorage.removeItem(this.key);
+                return defaultValue;
+            }
+
+            return parsedItem.value;
+        } catch (error) {
+            console.error('Error getting localStorage item with expiry:', error);
+            return defaultValue;
+        }
+    }
+
+    isExpired() {
+        try {
+            const item = localStorage.getItem(this.key);
+            if (item === null) {
+                return true;
+            }
+
+            const parsedItem = JSON.parse(item);
+            const now = new Date().getTime();
+
+            return now > parsedItem.expiry;
+        } catch (error) {
+            return true;
+        }
+    }
+
+    static clearAll() {
+        try {
+            localStorage.clear();
+            return true;
+        } catch (error) {
+            console.error('Error clearing localStorage:', error);
+            return false;
+        }
+    }
+
+    static isSupported() {
+        try {
+            const test = '__localStorage_test__';
+            localStorage.setItem(test, test);
+            localStorage.removeItem(test);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+}

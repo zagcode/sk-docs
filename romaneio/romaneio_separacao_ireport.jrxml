@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="romaneio_separacao" language="java" pageWidth="595" pageHeight="842" columnWidth="575" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" whenNoDataType="NoDataSection">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_NUNOTA_IDS" class="java.lang.String"/>
+	<parameter name="P_SEPARADOR" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[EXEC SANKHYA.DPS_ROMANEIO_SEPARACAO_RETORNA_CABECALHO $P{P_NUNOTA_IDS}, $P{P_SEPARADOR}]]>
+	</queryString>
+	<field name="numero_nota" class="java.lang.Integer"/>
+	<field name="saida_transp" class="java.lang.String"/>
+	<field name="numero_romaneio" class="java.lang.Integer"/>
+	<field name="codigo_filial" class="java.lang.Integer"/>
+	<field name="nome_filial" class="java.lang.String"/>
+	<field name="paginas" class="java.lang.Integer"/>
+	<field name="data_hora" class="java.sql.Timestamp"/>
+	<field name="serie_pedido" class="java.lang.String"/>
+	<field name="numero_pedido" class="java.lang.Integer"/>
+	<field name="box" class="java.lang.Integer"/>
+	<field name="data_hora_liberacao2" class="java.sql.Timestamp"/>
+	<field name="codigo_digitador" class="java.lang.Integer"/>
+	<field name="nome_digitador" class="java.lang.String"/>
+	<field name="cliente_numero" class="java.lang.Integer"/>
+	<field name="nome_cliente" class="java.lang.String"/>
+	<field name="numero_separador" class="java.lang.Integer"/>
+	<field name="nome_separador" class="java.lang.String"/>
+	<field name="end_cliente" class="java.lang.String"/>
+	<field name="cidade_cliente" class="java.lang.String"/>
+	<field name="estado_cliente" class="java.lang.String"/>
+	<field name="codigo_transportador" class="java.lang.Integer"/>
+	<field name="nome_transportador" class="java.lang.String"/>
+	<field name="cod_representante" class="java.lang.Integer"/>
+	<field name="nome_representante" class="java.lang.String"/>
+	<field name="tipo_frete" class="java.lang.String"/>
+	<field name="valor_frete" class="java.lang.Double"/>
+	<field name="codigo_condicao_venda" class="java.lang.Integer"/>
+	<field name="descicao_condicao_venda" class="java.lang.String"/>
+	<field name="valor_pedido" class="java.lang.Double"/>
+	<field name="segunda_via" class="java.lang.String"/>
+	<field name="inclusao" class="java.lang.String"/>
+	<field name="cod_barras" class="java.lang.String"/>
+	<field name="NUTAREFA" class="java.lang.Integer"/>
+	<field name="razao_cliente" class="java.lang.String"/>
+	<group name="G_PEDIDO" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{numero_pedido}]]></groupExpression>
+		<groupHeader>
+			<band height="360" splitType="Stretch">
+				<line><reportElement x="0" y="22" width="575" height="1"/></line>
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="2" width="80" height="18">
+						<printWhenExpression><![CDATA[$F{segunda_via} != null && $F{segunda_via}.equals("SEGUNDA VIA")]]></printWhenExpression>
+					</reportElement>
+					<textElement verticalAlignment="Middle"><font size="9" isBold="true"/></textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{segunda_via}]]></textFieldExpression>
+				</textField>
+				<staticText><reportElement x="85" y="2" width="95" height="18"/><textElement verticalAlignment="Middle"><font size="8" isBold="true"/></textElement><text><![CDATA[SAIDA TRANSPOR:]]></text></staticText>
+				<textField isBlankWhenNull="true"><reportElement x="180" y="2" width="200" height="18"/><textElement verticalAlignment="Middle"><font size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{saida_transp}]]></textFieldExpression></textField>
+				<staticText><reportElement x="320" y="2" width="180" height="18"/><textElement textAlignment="Right" verticalAlignment="Middle"><font size="8" isBold="true"/></textElement><text><![CDATA[ROMANEIO DE SEPARACAO NRO:]]></text></staticText>
+				<textField isBlankWhenNull="true"><reportElement x="500" y="2" width="75" height="18"/><textElement textAlignment="Right" verticalAlignment="Middle"><font size="9" isBold="true"/></textElement><textFieldExpression class="java.lang.Integer"><![CDATA[$F{numero_romaneio}]]></textFieldExpression></textField>
+				<rectangle><reportElement x="440" y="22" width="135" height="30"/></rectangle>
+				<textField isBlankWhenNull="true"><reportElement x="445" y="30" width="125" height="14"/><textElement textAlignment="Center" verticalAlignment="Middle"><font size="9" isBold="true"/></textElement><textFieldExpression class="java.lang.Integer"><![CDATA[$F{NUTAREFA}]]></textFieldExpression></textField>
+				<line><reportElement x="0" y="52" width="575" height="1"/></line>
+				<textField isBlankWhenNull="true"><reportElement x="0" y="54" width="355" height="16"/><textElement verticalAlignment="Middle"><font size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{nome_filial}]]></textFieldExpression></textField>
+				<textField><reportElement x="355" y="54" width="90" height="16"/><textElement textAlignment="Center" verticalAlignment="Middle"><font size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA["Pg " + $V{PAGE_NUMBER}]]></textFieldExpression></textField>
+				<textField isBlankWhenNull="true" pattern="dd/MM/yyyy HH:mm"><reportElement x="445" y="54" width="130" height="16"/><textElement textAlignment="Right" verticalAlignment="Middle"><font size="8"/></textElement><textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{data_hora}]]></textFieldExpression></textField>
+				<line><reportElement x="0" y="70" width="575" height="1"/></line>
+				<staticText><reportElement x="0" y="72" width="45" height="15"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[PEDIDO:]]></text></staticText>
+				<textField isBlankWhenNull="true"><reportElement x="45" y="72" width="145" height="15"/><textElement><font size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[($F{serie_pedido} == null ? "" : $F{serie_pedido} + " / ") + ($F{numero_pedido} == null ? "" : String.valueOf($F{numero_pedido}))]]></textFieldExpression></textField>
+				<staticText><reportElement x="195" y="72" width="30" height="15"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[BOX:]]></text></staticText>
+				<textField isBlankWhenNull="true"><reportElement x="225" y="72" width="45" height="15"/><textElement><font size="8"/></textElement><textFieldExpression class="java.lang.Integer"><![CDATA[$F{box}]]></textFieldExpression></textField>
+				<staticText><reportElement x="275" y="72" width="35" height="15"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[DATA:]]></text></staticText>
+				<textField isBlankWhenNull="true" pattern="dd/MM/yyyy HH:mm"><reportElement x="310" y="72" width="110" height="15"/><textElement><font size="8"/></textElement><textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{data_hora_liberacao2}]]></textFieldExpression></textField>
+				<staticText><reportElement x="425" y="72" width="55" height="15"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[DIGITADOR:]]></text></staticText>
+				<textField isBlankWhenNull="true"><reportElement x="480" y="72" width="95" height="15"/><textElement textAlignment="Right"><font size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{nome_digitador}]]></textFieldExpression></textField>
+				<staticText><reportElement x="0" y="88" width="58" height="15"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[SEPARADOR:]]></text></staticText>
+				<textField isBlankWhenNull="true"><reportElement x="58" y="88" width="517" height="15"/><textElement><font size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[($F{numero_separador} == null ? "" : String.valueOf($F{numero_separador})) + " / " + ($F{nome_separador} == null ? "" : $F{nome_separador})]]></textFieldExpression></textField>
+				<line><reportElement x="0" y="104" width="575" height="1"/></line>
+				<staticText><reportElement x="0" y="106" width="55" height="15"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[PARCEIRO:]]></text></staticText>
+				<textField isBlankWhenNull="true"><reportElement x="55" y="106" width="520" height="15"/><textElement><font size="8" isBold="true" isUnderline="true"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[($F{cliente_numero} == null ? "" : String.valueOf($F{cliente_numero})) + " / " + ($F{razao_cliente} == null ? "" : $F{razao_cliente}) + " / " + ($F{nome_cliente} == null ? "" : $F{nome_cliente})]]></textFieldExpression></textField>
+				<line><reportElement x="0" y="122" width="575" height="1"/></line>
+				<staticText><reportElement x="0" y="124" width="55" height="15"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[ENDERECO:]]></text></staticText>
+				<textField isBlankWhenNull="true"><reportElement x="55" y="124" width="330" height="15"/><textElement><font size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{end_cliente}]]></textFieldExpression></textField>
+				<staticText><reportElement x="390" y="124" width="35" height="15"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[CID:]]></text></staticText>
+				<textField isBlankWhenNull="true"><reportElement x="425" y="124" width="150" height="15"/><textElement><font size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[($F{cidade_cliente} == null ? "" : $F{cidade_cliente}) + "/" + ($F{estado_cliente} == null ? "" : $F{estado_cliente})]]></textFieldExpression></textField>
+				<line><reportElement x="0" y="140" width="575" height="1"/></line>
+				<staticText><reportElement x="0" y="142" width="85" height="15"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[TRANSPORTADOR:]]></text></staticText>
+				<textField isBlankWhenNull="true"><reportElement x="85" y="142" width="245" height="15"/><textElement><font size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[($F{codigo_transportador} == null ? "" : String.valueOf($F{codigo_transportador})) + " - " + ($F{nome_transportador} == null ? "" : $F{nome_transportador})]]></textFieldExpression></textField>
+				<staticText><reportElement x="335" y="142" width="45" height="15"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[REPRES:]]></text></staticText>
+				<textField isBlankWhenNull="true"><reportElement x="380" y="142" width="195" height="15"/><textElement><font size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[($F{cod_representante} == null ? "" : String.valueOf($F{cod_representante})) + " - " + ($F{nome_representante} == null ? "" : $F{nome_representante})]]></textFieldExpression></textField>
+				<line><reportElement x="0" y="158" width="575" height="1"/></line>
+				<staticText><reportElement x="0" y="160" width="35" height="15"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[FRETE:]]></text></staticText>
+				<textField isBlankWhenNull="true"><reportElement x="35" y="160" width="80" height="15"/><textElement><font size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{tipo_frete}]]></textFieldExpression></textField>
+				<staticText><reportElement x="120" y="160" width="55" height="15"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[VL FRETE:]]></text></staticText>
+				<textField isBlankWhenNull="true" pattern="#,#00.00"><reportElement x="175" y="160" width="70" height="15"/><textElement><font size="8"/></textElement><textFieldExpression class="java.lang.Double"><![CDATA[$F{valor_frete}]]></textFieldExpression></textField>
+				<staticText><reportElement x="250" y="160" width="60" height="15"/><textElement><font size="8" isBold="true"/></textElement><text><![CDATA[COND VENDA:]]></text></staticText>
+				<textField isBlankWhenNull="true"><reportElement x="310" y="160" width="190" height="15"/><textElement><font size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{descicao_condicao_venda}]]></textFieldExpression></textField>
+				<textField isBlankWhenNull="true"><reportElement x="500" y="160" width="75" height="15"/><textElement textAlignment="Right"><font size="8" isBold="true"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{inclusao}]]></textFieldExpression></textField>
+				<rectangle><reportElement x="0" y="178" width="575" height="32"/></rectangle>
+				<line><reportElement x="95" y="178" width="1" height="32"/></line>
+				<line><reportElement x="190" y="178" width="1" height="32"/></line>
+				<line><reportElement x="285" y="178" width="1" height="32"/></line>
+				<line><reportElement x="380" y="178" width="1" height="32"/></line>
+				<line><reportElement x="475" y="178" width="1" height="32"/></line>
+				<staticText><reportElement x="0" y="180" width="95" height="28"/><textElement textAlignment="Center" verticalAlignment="Middle"><font size="8"/></textElement><text><![CDATA[CAIXAS]]></text></staticText>
+				<staticText><reportElement x="95" y="180" width="95" height="28"/><textElement textAlignment="Center" verticalAlignment="Middle"><font size="8"/></textElement><text><![CDATA[CONFERENTE]]></text></staticText>
+				<staticText><reportElement x="190" y="180" width="95" height="28"/><textElement textAlignment="Center" verticalAlignment="Middle"><font size="8"/></textElement><text><![CDATA[EMBALADOR]]></text></staticText>
+				<staticText><reportElement x="285" y="180" width="95" height="28"/><textElement textAlignment="Center" verticalAlignment="Middle"><font size="8"/></textElement><text><![CDATA[VOLUMES]]></text></staticText>
+				<staticText><reportElement x="380" y="180" width="95" height="28"/><textElement textAlignment="Center" verticalAlignment="Middle"><font size="8"/></textElement><text><![CDATA[PESO]]></text></staticText>
+				<staticText><reportElement x="475" y="180" width="100" height="28"/><textElement textAlignment="Center" verticalAlignment="Middle"><font size="8"/></textElement><text><![CDATA[DIARIO
+****]]></text></staticText>
+				<rectangle><reportElement x="0" y="220" width="575" height="20"/></rectangle>
+				<line><reportElement x="45" y="220" width="1" height="20"/></line>
+				<line><reportElement x="85" y="220" width="1" height="20"/></line>
+				<line><reportElement x="165" y="220" width="1" height="20"/></line>
+				<line><reportElement x="285" y="220" width="1" height="20"/></line>
+				<line><reportElement x="330" y="220" width="1" height="20"/></line>
+				<line><reportElement x="415" y="220" width="1" height="20"/></line>
+				<line><reportElement x="530" y="220" width="1" height="20"/></line>
+				<staticText><reportElement x="0" y="223" width="45" height="14"/><textElement textAlignment="Center"><font size="8" isBold="true"/></textElement><text><![CDATA[QTDE]]></text></staticText>
+				<staticText><reportElement x="45" y="223" width="40" height="14"/><textElement textAlignment="Center"><font size="8" isBold="true"/></textElement><text><![CDATA[SEP]]></text></staticText>
+				<staticText><reportElement x="85" y="223" width="80" height="14"/><textElement textAlignment="Center"><font size="8" isBold="true"/></textElement><text><![CDATA[ITEM]]></text></staticText>
+				<staticText><reportElement x="165" y="223" width="120" height="14"/><textElement textAlignment="Center"><font size="8" isBold="true"/></textElement><text><![CDATA[S.R.L.C.A]]></text></staticText>
+				<staticText><reportElement x="285" y="223" width="45" height="14"/><textElement textAlignment="Center"><font size="8" isBold="true"/></textElement><text><![CDATA[UNI]]></text></staticText>
+				<staticText><reportElement x="330" y="223" width="85" height="14"/><textElement textAlignment="Center"><font size="8" isBold="true"/></textElement><text><![CDATA[FAMILIA]]></text></staticText>
+				<staticText><reportElement x="415" y="223" width="115" height="14"/><textElement textAlignment="Center"><font size="8" isBold="true"/></textElement><text><![CDATA[DESCRICAO]]></text></staticText>
+				<staticText><reportElement x="530" y="223" width="45" height="14"/><textElement textAlignment="Center"><font size="8" isBold="true"/></textElement><text><![CDATA[SUB]]></text></staticText>
+				<subreport isUsingCache="false">
+					<reportElement x="0" y="242" width="575" height="100" positionType="Float" stretchType="RelativeToTallestObject"/>
+					<subreportParameter name="P_CODEMP">
+						<subreportParameterExpression><![CDATA[$F{codigo_filial}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="P_NUNOTA_IDS">
+						<subreportParameterExpression><![CDATA[String.valueOf($F{NUTAREFA})]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="P_CODIGO_SEPARADOR">
+						<subreportParameterExpression><![CDATA[$F{numero_separador}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "romaneio_separacao_itens_subreport.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupHeader>
+	</group>
+	<detail>
+		<band height="1" splitType="Stretch"/>
+	</detail>
+	<noData>
+		<band height="30">
+			<staticText><reportElement x="0" y="5" width="575" height="20"/><textElement textAlignment="Center" verticalAlignment="Middle"><font size="10" isBold="true"/></textElement><text><![CDATA[Nao ha dados para impressao do romaneio.]]></text></staticText>
+		</band>
+	</noData>
+</jasperReport>

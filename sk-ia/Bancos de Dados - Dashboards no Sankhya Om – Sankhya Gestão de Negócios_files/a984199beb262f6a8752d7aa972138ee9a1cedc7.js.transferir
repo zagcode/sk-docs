@@ -1,0 +1,74 @@
+class ZendeskAPI {
+  static async fetchAPI(url, errorContext, delay = 0) {
+    await new Promise((resolve) => setTimeout(resolve, delay));
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error(`Error ${errorContext}:`, error);
+      return null;
+    }
+  }
+
+  static async getArticlesByCategory(categoryId) {
+    const data = await this.fetchAPI(
+      `/api/v2/help_center/categories/${categoryId}/articles.json`,
+      `loading articles for category ${categoryId}`,
+    );
+    return data?.articles || [];
+  }
+
+  static async getUserSegments(userId) {
+    const data = await this.fetchAPI(
+      `/api/v2/help_center/users/${userId}/user_segments.json`,
+      "fetching user segments",
+    );
+    return data?.user_segments || [];
+  }
+
+  static async getPromotedArticles() {
+    const data = await this.fetchAPI(
+      "/api/v2/help_center/articles?per_page=100&sort_by=promoted&sort_order=desc",
+      "fetching promoted articles",
+    );
+    return data?.articles?.filter((a) => a.promoted) || [];
+  }
+
+  static async getArticle(id) {
+    const data = await this.fetchAPI(
+      "/api/v2/help_center/articles/" + id,
+      "fetching articles",
+    );
+    return data;
+  }
+
+  static async getCategories() {
+    const data = await this.fetchAPI(
+      "/api/v2/help_center/categories.json",
+      "fetching categories",
+    );
+    return data?.categories || [];
+  }
+
+  static async getRequests() {
+    const data = await this.fetchAPI(
+      "/api/v2/requests.json?status=new,pending,holded,open",
+      "fetching requests",
+    );
+    return data?.requests || [];
+  }
+
+  static async getCurrentUserWithOrganizations() {
+    const data = await this.fetchAPI(
+      "/api/v2/users/me?include=organizations",
+      "fetching current user with organizations",
+    );
+    return data || {};
+  }
+}
+
+window.ZendeskAPI = ZendeskAPI;
