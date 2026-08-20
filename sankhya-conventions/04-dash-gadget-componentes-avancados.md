@@ -469,6 +469,22 @@ SELECT CODPARC, NOMEPARC, TIPPESSOA, CODCID FROM TGFPAR WHERE /*inCollection*/
 CODCID in :P_CODCID/*inCollection*/
 ```
 
+**Limite prático observado bem abaixo de 1000** (confirmado em
+`sk-dash/desempenho vendas marca/desempenho_vendas_marca.xml`, 2026-08-20):
+selecionando "todas as opções" de um `multiList:Text` com apenas **241**
+valores (`P_MARCA`, código inteiro `TGFMAR.CODIGO`), a execução falhou com
+`A identificador iniciado com 'PARAM('2', '139', '133', ...' é muito
+extensa. O comprimento máximo é 128` — erro clássico de identificador do SQL
+Server (limite de 128 caracteres para `sysname`), indicando que sem o
+marcador o Sankhya tenta nomear algum bind/identificador interno a partir da
+própria lista de valores substituída, e isso já estoura com poucas dezenas
+de itens. **Não confiar no limiar de "1000 valores" da documentação oficial
+— aplicar `/*inCollection*/` em todo `IN :PARAM` de multiList por padrão**,
+mesmo em listas pequenas (o marcador não tem custo perceptível quando a
+lista é pequena). Aplica-se também a `IN` dentro de subquery (não só direto
+no `WHERE` principal) — colocar `/*inCollection*/` logo antes da coluna e
+logo depois do parâmetro, onde quer que o `IN :PARAM` apareça.
+
 ## Aba Configurações (≠ Parâmetros)
 
 Mesmos campos de Parâmetros, mas com **"Valor Padrão"** fixo — uma vez

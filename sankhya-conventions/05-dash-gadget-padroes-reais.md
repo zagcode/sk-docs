@@ -761,9 +761,18 @@ reativa — alternativas usadas em produção:
 - Listar tudo, mas ordenar/rotular pelo campo "pai" (ex.: `LABEL = MARCA + ' - ' + PRODUTO`, `ORDER BY MARCA, PRODUTO`) para facilitar achar visualmente, com o SQL final da query de dados ainda combinando os dois parâmetros corretamente.
 - Ou usar 2 níveis (`<level>`) — o primeiro só com o filtro "pai", que ao navegar (`on-click navigate-to`) já leva o valor escolhido como `<arg>` fixo para o nível seguinte, que aí sim roda a query "filha" já restrita.
 
-Ver dashboard `sk-dash/desempenho vendas marca/desempenho_vendas_marca.xml`
-para um exemplo do primeiro padrão (`P_PRODUTO` listado por completo, rotulado
-por marca).
+**Cuidado com o tamanho da lista no padrão "listar tudo"**: em
+`sk-dash/desempenho vendas marca/desempenho_vendas_marca.xml` esse padrão foi
+tentado para um parâmetro `P_PRODUTO` (todo `TGFPRO`, ~63 mil linhas,
+rotulado por marca) e causou lentidão perceptível na abertura da tela de
+filtros do dash — o componente `multiList:Text` do Construtor de BI não
+pagina/virtualiza bem listas dessa ordem de grandeza. O parâmetro foi
+**removido** do dashboard (usuário decidiu filtrar só por Marca, sem filtro
+de Produto). Regra prática: reservar `listType="sql"` em `multiList:Text`
+para listas na casa das centenas/poucos milhares de linhas (ex.: `TGFMAR`
+com ~250 marcas é ok); para uma tabela de dezenas de milhares de linhas
+(produtos, parceiros), preferir o padrão dos 2 níveis (`<level>`) descrito
+acima, ou simplesmente não oferecer aquele filtro se não for essencial.
 
 ## 17. `AD_DPSFERIADOS` — nome de coluna confirmado: `EXPEDIENTENORMAL`
 
