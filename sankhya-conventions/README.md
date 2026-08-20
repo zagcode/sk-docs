@@ -44,6 +44,7 @@ ser duplicadas com risco de divergência. Esta pasta:
 | [06-acoes-customizadas.md](06-acoes-customizadas.md) | As 4 modalidades de Ação vinculável a um componente/tela: Rotina no Banco de Dados, Script (JavaScript server-side), Rotina Java, Lançador |
 | [07-relatorios-jrxml.md](07-relatorios-jrxml.md) | Convenções de relatórios iReport/JRXML e o procedimento de decompilar classes vendor compiladas |
 | [08-referencias-externas.md](08-referencias-externas.md) | Onde buscar mais: portal developer.sankhya.com.br, docs locais já salvas, e o que falta baixar |
+| [09-api-consulta-dps.md](09-api-consulta-dps.md) | `dps-consulta`: API sob demanda (não always-on) pra validar SELECTs de dash/relatório contra o Sankhya, já que não há mais acesso direto ao banco |
 
 ## Estrutura das pastas Sankhya do workspace (contexto)
 
@@ -57,3 +58,5 @@ ser duplicadas com risco de divergência. Esta pasta:
 | `sk-report/` | Relatórios do projeto no padrão iReport (JRXML) |
 | `sk-mge/` | Núcleo Sankhya (jars decompilados/referência) |
 | `sk-bd/` | Scripts de banco avulsos (feriados, WMS) |
+| `dps-recepcao/` | Sistema operacional (Node.js) — totem/painel/entrega, integração 100% via API Sankhya, sempre no ar |
+| `dps-consulta/` | API sob demanda (não always-on) pra validar SELECTs de dash/relatório contra o Sankhya — ver [09-api-consulta-dps.md](09-api-consulta-dps.md) |
