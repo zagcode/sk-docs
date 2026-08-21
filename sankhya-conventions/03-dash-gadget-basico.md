@@ -128,6 +128,35 @@ Bloco omitido quando nenhum valor selecionado; `IN` funciona com 1 ou N valores.
 
 > Por que não usar `(:FAIXA IS NULL OR ... IN (:FAIXA))`: o Sankhya expande `(:FAIXA)` para `(('v1','v2'))` com múltiplos valores, gerando "expressão de tipo não booleano" no `IS NULL` e parênteses duplos inválidos no `IN`. Sempre usar `[PARAM]...[/PARAM]`.
 
+> **Alerta (2026-08-20, `sk-dash/desempenho vendas marca/`)**: o bloco
+> `[PARAM:ID]...[/PARAM:ID]` acima **nunca apareceu em nenhum dashboard real
+> deste workspace** — só existia como exemplo de doc, nunca validado contra
+> o Sankhya Cloud real. Ao usá-lo pela primeira vez (`P_MARCA`, `multiList`
+> com 241 valores possíveis, usuário selecionou todos), a execução falhou
+> com `CORE_E05294` / `A identificador iniciada com 'PARAM('2', '139', ...'
+> é muito extensa. O comprimento máximo é 128` — sugere que, nesta versão do
+> Sankhya Cloud, a resolução do bloco `[PARAM:ID]` e a substituição literal
+> de `:ID` por `('v1','v2',...)` colidem quando o texto `:ID` também aparece
+> dentro do próprio marcador `[PARAM:ID]`/`[/PARAM:ID]` (ambos contêm a
+> substring `:P_MARCA`), deixando um fragmento tipo `PARAM('2','139',...)`
+> sem ser removido do SQL final. Envolver a cláusula com `/*inCollection*/`
+> **não resolveu** (esse marcador só é lido pelo Sankhya quando a lista tem
+> ≥ 1000 valores — ver `04-dash-gadget-componentes-avancados.md`; com 241
+> valores ele fica inerte).
+>
+> **Padrão realmente comprovado em produção** (`analise.vendas.xml`,
+> `P_MARCA`/`P_CODCOMP`/`P_AD_LINHA`, todos `required="false"`): **não usar
+> `[PARAM:ID]` nenhuma** — deixar o `IN :PARAM` incondicional direto no
+> `WHERE`/`AND`. Trade-off aceito nesse padrão: se o usuário não selecionar
+> nenhum valor, `:PARAM` vira `NULL` e `CAMPO IN NULL` não filtra nenhuma
+> linha (grid fica vazio) — não é "mostrar tudo", é "não retorna nada". Para
+> um filtro que deve realmente ser opcional (mostrar tudo quando vazio), a
+> única forma comprovada até agora é reformular `required="false"` como
+> `required="true"` e deixar o próprio usuário selecionar todos os valores
+> quando quiser "tudo", em vez de confiar em qualquer sintaxe condicional
+> `[PARAM]`/`(:X IS NULL OR ...)` — nenhuma das duas está validada neste
+> workspace contra a versão atual do Sankhya Cloud.
+
 ## Convenções de navegação e grid
 
 - `on-click` navega para outro **nível**; `refresh-details` atualiza outro(s) **grid(s)/componente(s) no mesmo nível**.
